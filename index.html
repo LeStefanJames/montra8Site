@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Menu</title>
+<style>
+  :root {
+    --bg: #faf7f2;
+    --text: #1f1f1f;
+    --primary: #1f1f1f;
+    --whatsapp: #25D366;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; min-height: 100%; }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    display: flex;
+    justify-content: center;
+  }
+  .app {
+    position: relative;
+    width: 100%;
+    max-width: 480px;
+  }
+
+  /* Small logo, top left, shown on both views */
+  .logo {
+    position: absolute;
+    top: 16px;
+    left: 20px;
+    height: 72px;
+    width: auto;
+    max-width: 200px;
+    object-fit: contain;
+    z-index: 1;
+  }
+
+  .view {
+    width: 100%;
+    padding: 112px 20px 32px;
+    display: none;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .view.active { display: flex; }
+
+  /* Home view: buttons centered vertically */
+  #home { min-height: 100vh; min-height: 100dvh; justify-content: center; padding-bottom: 112px; }
+
+  .btn {
+    display: block;
+    width: 100%;
+    padding: 18px 20px;
+    border: none;
+    border-radius: 14px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn:active { transform: scale(.98); }
+  .btn-menu { background: var(--primary); color: #fff; }
+  .btn-wa { background: var(--whatsapp); color: #fff; }
+
+  /* Menu view */
+  .menu-img {
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    display: block;
+  }
+  .back {
+    align-self: flex-start;
+    background: none;
+    border: none;
+    font-size: 1rem;
+    color: var(--text);
+    padding: 4px 0;
+    cursor: pointer;
+  }
+  /* Keeps the WhatsApp button reachable while scrolling a long menu image */
+  #menu .btn-wa { position: sticky; bottom: 16px; box-shadow: 0 4px 14px rgba(0,0,0,.2); }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <img class="logo" src="logo.png" alt="Logo" onerror="this.style.display='none'">
+
+  <!-- Main page -->
+  <main id="home" class="view active">
+    <button class="btn btn-menu" id="open-menu" type="button">Ver Preços</button>
+    <a class="btn btn-wa" data-wa href="#">Encomendar via WhatsApp</a>
+  </main>
+
+  <!-- Menu page -->
+  <section id="menu" class="view">
+    <button class="back" id="back" type="button">← Voltar</button>
+    <img class="menu-img" src="menu.jpg" alt="Menu">
+    <a class="btn btn-wa" data-wa href="#">Encomendar via WhatsApp</a>
+  </section>
+</div>
+
+<script>
+  // ====== EDIT THESE TWO THINGS ======
+  // Portuguese number: country code 351 + 9 digits, no "+", no spaces. Example: 351912345678
+  var PHONE = "351912751610";
+  // Message that appears pre-filled in the chat (can be empty: "")
+  var MESSAGE = "Olá! Gostaria de fazer uma encomenda.";
+  // ===================================
+
+  var url = "https://wa.me/" + PHONE + (MESSAGE ? "?text=" + encodeURIComponent(MESSAGE) : "");
+  document.querySelectorAll("[data-wa]").forEach(function (a) { a.href = url; });
+
+  var home = document.getElementById("home");
+  var menu = document.getElementById("menu");
+
+  function show(view) {
+    home.classList.toggle("active", view === "home");
+    menu.classList.toggle("active", view === "menu");
+    window.scrollTo(0, 0);
+  }
+
+  document.getElementById("open-menu").addEventListener("click", function () {
+    location.hash = "menu";
+  });
+  document.getElementById("back").addEventListener("click", function () {
+    history.length > 1 ? history.back() : (location.hash = "");
+  });
+  window.addEventListener("hashchange", function () {
+    show(location.hash === "#menu" ? "menu" : "home");
+  });
+  show(location.hash === "#menu" ? "menu" : "home");
+</script>
+</body>
+</html>
