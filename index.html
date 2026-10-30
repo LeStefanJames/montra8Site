@@ -86,12 +86,79 @@
   .btn-menu { background: #fff; color: #1f1f1f; }
   .btn-wa { background: var(--whatsapp); color: #fff; }
 
-  /* Menu view */
-  .menu-img {
+  /* Menu view: product grid */
+  .promo-banner {
+    background: #ffce45;
+    color: #1f1f1f;
+    font-weight: 700;
+    font-size: .95rem;
+    text-align: center;
+    line-height: 1.3;
+    padding: 12px 16px;
+    border-radius: 14px;
+    box-shadow: 0 4px 14px rgba(0,0,0,.18);
+  }
+  .menu-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .product-card {
+    position: relative;
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 14px rgba(0,0,0,.18);
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .product-card:active { transform: scale(.98); }
+  .product-badge {
+    background: #1f1f1f;
+    color: #fff;
+    font-size: .7rem;
+    font-weight: 700;
+    text-align: center;
+    padding: 4px 8px;
+    letter-spacing: .2px;
+  }
+  .product-cart-badge {
+    display: none;
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    background: #1f1f1f;
+    color: #fff;
+    font-size: .68rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 10px;
+  }
+  .product-img {
     width: 100%;
-    height: auto;
-    border-radius: 12px;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
     display: block;
+    background: #eee;
+  }
+  .product-info {
+    padding: 10px 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .product-name {
+    font-weight: 700;
+    font-size: .95rem;
+    color: #1f1f1f;
+    line-height: 1.25;
+  }
+  .product-price {
+    font-size: .85rem;
+    color: #555;
   }
   .back {
     align-self: flex-start;
@@ -102,8 +169,135 @@
     padding: 4px 0;
     cursor: pointer;
   }
-  /* Keeps the WhatsApp button reachable while scrolling a long menu image */
+  /* Keeps the WhatsApp button reachable while scrolling a long product grid */
   #menu .btn-wa { position: sticky; bottom: 16px; box-shadow: 0 4px 14px rgba(0,0,0,.2); }
+  .cart-total {
+    display: none;
+    text-align: center;
+    font-weight: 700;
+    font-size: 1rem;
+    color: #fff;
+  }
+
+  /* Step-by-step product configurator: size -> frame -> confirm, opened as a bottom sheet */
+  .cfg-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.55);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    z-index: 50;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s;
+  }
+  .cfg-overlay.open { opacity: 1; pointer-events: auto; }
+  .cfg-sheet {
+    width: 100%;
+    max-width: 480px;
+    max-height: 85vh;
+    overflow-y: auto;
+    background: #fff;
+    border-radius: 20px 20px 0 0;
+    padding: 20px;
+    box-shadow: 0 -4px 20px rgba(0,0,0,.25);
+  }
+  .cfg-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  .cfg-title { font-weight: 700; font-size: 1.05rem; color: #1f1f1f; }
+  .cfg-close {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    line-height: 1;
+    color: #1f1f1f;
+    cursor: pointer;
+    padding: 4px;
+  }
+  .cfg-step-label {
+    font-size: .8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .3px;
+    color: #888;
+    margin-bottom: 10px;
+  }
+  .cfg-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 18px; }
+  .cfg-option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 12px;
+    border: 1px solid #e3e0da;
+    background: #faf7f2;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1f1f1f;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .cfg-option:active { transform: scale(.98); }
+  .cfg-moldura-grid { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 18px; }
+  .cfg-moldura-option {
+    width: calc(33.333% - 7px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 8px;
+    border-radius: 12px;
+    border: 1px solid #e3e0da;
+    background: #faf7f2;
+    cursor: pointer;
+    font-size: .75rem;
+    font-weight: 600;
+    color: #1f1f1f;
+    text-align: center;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .cfg-moldura-option:active { transform: scale(.97); }
+  .cfg-moldura-option img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 8px;
+    display: block;
+  }
+  .cfg-summary { font-size: 1rem; line-height: 1.4; margin-bottom: 16px; }
+  .cfg-note {
+    background: #fff4d6;
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-size: .85rem;
+    line-height: 1.4;
+    margin-bottom: 18px;
+  }
+  .btn-add { background: #1f1f1f; color: #fff; }
+
+  .toast {
+    position: fixed;
+    top: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1f1f1f;
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-size: .85rem;
+    font-weight: 600;
+    z-index: 60;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .25s;
+  }
+  .toast.show { opacity: 1; }
 </style>
 </head>
 <body>
@@ -120,21 +314,250 @@
   <!-- Menu page -->
   <section id="menu" class="view">
     <button class="back" id="back" type="button">← Voltar</button>
-    <img class="menu-img" src="menu.jpg" alt="Menu">
-    <a class="btn btn-wa" data-wa href="#">Encomendar via WhatsApp</a>
+    <div class="promo-banner" id="promo-banner"></div>
+    <div class="menu-grid" id="menu-grid"></div>
+    <div class="cart-total" id="cart-total"></div>
+    <a class="btn btn-wa" id="menu-wa" data-wa href="#">Encomendar via WhatsApp</a>
   </section>
 </div>
 
+<div class="cfg-overlay" id="cfg-overlay">
+  <div class="cfg-sheet">
+    <div class="cfg-header">
+      <div class="cfg-title" id="cfg-title"></div>
+      <button class="cfg-close" id="cfg-close" type="button">✕</button>
+    </div>
+    <div class="cfg-body" id="cfg-body"></div>
+  </div>
+</div>
+
+<script src="products.js"></script>
 <script>
   // ====== EDIT THESE TWO THINGS ======
   // Portuguese number: country code 351 + 9 digits, no "+", no spaces. Example: 351912345678
   var PHONE = "351926541193";
   // Message that appears pre-filled in the chat (can be empty: "")
   var MESSAGE = "Olá! Gostaria de fazer uma encomenda.";
+  // Banner shown at the top of the menu (set to "" to hide it)
+  var PROMO = "🎉 Leva 3 Paga 2 em qualquer compra";
   // ===================================
 
   var url = "https://wa.me/" + PHONE + (MESSAGE ? "?text=" + encodeURIComponent(MESSAGE) : "");
   document.querySelectorAll("[data-wa]").forEach(function (a) { a.href = url; });
+
+  var promoBanner = document.getElementById("promo-banner");
+  if (PROMO) { promoBanner.textContent = PROMO; } else { promoBanner.style.display = "none"; }
+
+  function formatPrice(v) {
+    return v.toFixed(2).replace(".", ",") + "€";
+  }
+
+  function priceLine(p) {
+    var parts = [];
+    if (p.priceA3 != null) parts.push("A3: " + formatPrice(p.priceA3));
+    if (p.priceA4 != null) parts.push("A4: " + formatPrice(p.priceA4));
+    return parts.join(" · ");
+  }
+
+  var menuGrid = document.getElementById("menu-grid");
+  var menuWaBtn = document.getElementById("menu-wa");
+  var cfgOverlay = document.getElementById("cfg-overlay");
+  var cfgTitle = document.getElementById("cfg-title");
+  var cfgBody = document.getElementById("cfg-body");
+  var cfgClose = document.getElementById("cfg-close");
+
+  var cart = []; // { productIndex, type, name, size, frame, moldura, price }
+  var cartBadges = []; // "Nx no carrinho" badge element per product card, by product index
+
+  function cartLines() {
+    return cart.map(function (item) {
+      var frameText = item.frame ? (" com moldura" + (item.moldura ? " " + molduraLabel(item.moldura) : "")) : "";
+      return '- Poster "' + item.name + '" em tamanho ' + item.size + frameText + ".";
+    }).join("\n");
+  }
+
+  // Promo: every 3rd item (cheapest) within the same type+frame combo is free ("Leva 3 Paga 2")
+  function cartTotal() {
+    var groups = {};
+    cart.forEach(function (item) {
+      var key = item.type + (item.frame ? ":framed" : ":plain");
+      (groups[key] = groups[key] || []).push(item.price);
+    });
+    var total = 0;
+    Object.keys(groups).forEach(function (key) {
+      var prices = groups[key].slice().sort(function (a, b) { return b - a; });
+      prices.forEach(function (price, idx) { if ((idx + 1) % 3 !== 0) total += price; });
+    });
+    return total;
+  }
+
+  var cartTotalEl = document.getElementById("cart-total");
+  function updateCartTotal() {
+    if (cart.length === 0) { cartTotalEl.style.display = "none"; return; }
+    cartTotalEl.style.display = "block";
+    cartTotalEl.textContent = "Total: " + formatPrice(cartTotal());
+  }
+
+  function updateMenuWaButton() {
+    if (cart.length === 0) {
+      menuWaBtn.href = url;
+      menuWaBtn.textContent = "Encomendar via WhatsApp";
+      return;
+    }
+    var text = "Olá. Gostaria de fazer uma encomenda:\n" + cartLines();
+    menuWaBtn.href = "https://wa.me/" + PHONE + "?text=" + encodeURIComponent(text);
+    menuWaBtn.textContent = "Encomendar via WhatsApp (" + cart.length + ")";
+  }
+
+  function updateCartBadge(productIndex) {
+    var count = cart.filter(function (item) { return item.productIndex === productIndex; }).length;
+    var badge = cartBadges[productIndex];
+    if (!badge) return;
+    badge.style.display = count > 0 ? "block" : "none";
+    badge.textContent = count + "x no carrinho";
+  }
+
+  var toastEl = null;
+  function showToast(msg) {
+    if (!toastEl) {
+      toastEl = document.createElement("div");
+      toastEl.className = "toast";
+      document.body.appendChild(toastEl);
+    }
+    toastEl.textContent = msg;
+    toastEl.classList.add("show");
+    clearTimeout(toastEl._t);
+    toastEl._t = setTimeout(function () { toastEl.classList.remove("show"); }, 1600);
+  }
+
+  function closeConfigurator() { cfgOverlay.classList.remove("open"); }
+  cfgClose.addEventListener("click", closeConfigurator);
+  cfgOverlay.addEventListener("click", function (e) { if (e.target === cfgOverlay) closeConfigurator(); });
+
+  function renderCfgOptions(options) {
+    var wrap = document.createElement("div");
+    wrap.className = "cfg-options";
+    options.forEach(function (opt) {
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "cfg-option";
+      btn.innerHTML = "<span>" + opt.label + "</span><span>" + formatPrice(opt.price) + "</span>";
+      btn.addEventListener("click", opt.onSelect);
+      wrap.appendChild(btn);
+    });
+    cfgBody.appendChild(wrap);
+  }
+
+  function cfgStepLabel(text) {
+    var label = document.createElement("div");
+    label.className = "cfg-step-label";
+    label.textContent = text;
+    cfgBody.appendChild(label);
+  }
+
+  function showSizeStep(p, productIndex) {
+    cfgTitle.textContent = p.name;
+    cfgBody.innerHTML = "";
+    cfgStepLabel("Escolhe o tamanho");
+    var sizes = [];
+    if (p.priceA3 != null) sizes.push({ size: "A3", price: p.priceA3 });
+    if (p.priceA4 != null) sizes.push({ size: "A4", price: p.priceA4 });
+    renderCfgOptions(sizes.map(function (s) {
+      return {
+        label: s.size,
+        price: s.price,
+        onSelect: function () { showFrameStep(p, productIndex, s.size, s.price); }
+      };
+    }));
+  }
+
+  function showFrameStep(p, productIndex, size, basePrice) {
+    var molduraPrice = size === "A3" ? p.priceMolduraA3 : p.priceMolduraA4;
+    if (molduraPrice == null) {
+      showConfirmStep(p, productIndex, size, false, basePrice, null);
+      return;
+    }
+    cfgBody.innerHTML = "";
+    cfgStepLabel("Apenas poster ou com moldura?");
+    renderCfgOptions([
+      { label: "Apenas Poster", price: basePrice, onSelect: function () { showConfirmStep(p, productIndex, size, false, basePrice, null); } },
+      { label: "Poster com Moldura", price: molduraPrice, onSelect: function () { showMolduraStep(p, productIndex, size, molduraPrice); } }
+    ]);
+  }
+
+  function molduraLabel(filename) {
+    return filename.replace(/\.[^.]+$/, "").replace(/[-_]/g, " ").replace(/\b\w/g, function (c) { return c.toUpperCase(); });
+  }
+
+  function showMolduraStep(p, productIndex, size, price) {
+    var molduras = typeof MOLDURAS !== "undefined" ? MOLDURAS : [];
+    if (molduras.length === 0) {
+      showConfirmStep(p, productIndex, size, true, price, null);
+      return;
+    }
+    cfgBody.innerHTML = "";
+    cfgStepLabel("Escolhe a moldura");
+    var grid = document.createElement("div");
+    grid.className = "cfg-moldura-grid";
+    molduras.forEach(function (filename) {
+      var opt = document.createElement("button");
+      opt.type = "button";
+      opt.className = "cfg-moldura-option";
+      opt.innerHTML = '<img src="molduras/' + filename + '" alt="' + molduraLabel(filename) + '">' +
+        "<span>" + molduraLabel(filename) + "</span>";
+      opt.addEventListener("click", function () { showConfirmStep(p, productIndex, size, true, price, filename); });
+      grid.appendChild(opt);
+    });
+    cfgBody.appendChild(grid);
+  }
+
+  function showConfirmStep(p, productIndex, size, framed, price, moldura) {
+    var frameSummary = framed ? " com moldura" + (moldura ? " (" + molduraLabel(moldura) + ")" : "") : "";
+    cfgBody.innerHTML =
+      '<div class="cfg-summary">' + p.name + " — " + size + frameSummary + " — " + formatPrice(price) + "</div>" +
+      (p.type === "User Defined Poster"
+        ? '<div class="cfg-note">Envia-nos por WhatsApp o poster que pretendes imprimir, e nós tratamos do resto.</div>'
+        : "") +
+      '<button type="button" class="btn btn-add" id="cfg-add">Adicionar ao Carrinho</button>';
+    document.getElementById("cfg-add").addEventListener("click", function () {
+      cart.push({ productIndex: productIndex, type: p.type, name: p.name, size: size, frame: framed, moldura: moldura, price: price });
+      updateCartBadge(productIndex);
+      updateMenuWaButton();
+      updateCartTotal();
+      closeConfigurator();
+      showToast("Adicionado ao carrinho ✅");
+    });
+  }
+
+  function openConfigurator(p, productIndex) {
+    showSizeStep(p, productIndex);
+    cfgOverlay.classList.add("open");
+  }
+
+  (typeof PRODUCTS !== "undefined" ? PRODUCTS : []).forEach(function (p, i) {
+    var card = document.createElement("div");
+    card.className = "product-card";
+    var badgeHtml = p.extraInfo
+      ? '<div class="product-badge" style="background:' + (p.extraInfoColor || "#1f1f1f") + '">' + p.extraInfo + "</div>"
+      : "";
+    card.innerHTML =
+      badgeHtml +
+      '<img class="product-img" src="' + p.image + '" alt="' + p.name + '">' +
+      '<div class="product-info">' +
+        '<div class="product-name">' + p.name + "</div>" +
+        '<div class="product-price">' + priceLine(p) + "</div>" +
+      "</div>" +
+      '<div class="product-cart-badge"></div>';
+    cartBadges[i] = card.querySelector(".product-cart-badge");
+    card.addEventListener("click", function () {
+      if (p.type === "poster" || p.type === "User Defined Poster") {
+        openConfigurator(p, i);
+      } else {
+        showToast("Brevemente disponível 🙂");
+      }
+    });
+    menuGrid.appendChild(card);
+  });
 
   var home = document.getElementById("home");
   var menu = document.getElementById("menu");
