@@ -34,6 +34,98 @@
 // },
 
 const PRODUCTS = [
+  //Personaliza
+  {
+    type: "User Defined Poster",
+    name: "Personaliza o Teu Poster",
+    priceA3: 4,
+    priceA4: 3,
+    priceMolduraA3: 15,
+    priceMolduraA4: 12,
+    image: "produtos/Personal.jpeg"
+  },
+  
+    //BadB
+  {
+    type: "poster",
+    name: "Por La Mañana Café ♫",
+    priceA3: 4,
+    priceA4: 3,
+    priceMolduraA3: 15,
+    priceMolduraA4: 12,
+    image: "produtos/CoelhoCafe.jpeg"
+  },
+  
+    //Stan
+  {
+    type: "poster",
+    name: "Stan The Man",
+    priceA3: 4,
+    priceA4: 3,
+    priceMolduraA3: 15,
+    priceMolduraA4: 12,
+    image: "produtos/Stan.jpeg",
+    extraInfo: "🔥 Best Seller 🔥",
+    extraInfoColor: "red"
+  },
+  
+    //DSOTM
+  {
+    type: "poster",
+    name: "The Dark Side of The Moon",
+    priceA3: 4,
+    priceA4: 3,
+    priceMolduraA3: 15,
+    priceMolduraA4: 12,
+    image: "produtos/DSOTM.jpeg"
+  },
+  
+    //Canito
+  {
+    type: "poster",
+    name: "Cool Doggo",
+    priceA3: 4,
+    priceA4: 3,
+    priceMolduraA3: 15,
+    priceMolduraA4: 12,
+    image: "produtos/Canito.jpeg"
+  },
+    
+  
+  //casaMyPlace
+  {
+    type: "poster",
+    name: "Home ...",
+    priceA3: 4,
+    priceA4: 3,
+    priceMolduraA3: 15,
+    priceMolduraA4: 12,
+    image: "produtos/casaMyPlace.jpeg"
+  },
+  
+    //PinturaPraia
+  {
+    type: "poster",
+    name: "Saint Tropez",
+    priceA3: 4,
+    priceA4: 3,
+    priceMolduraA3: 15,
+    priceMolduraA4: 12,
+    image: "produtos/PinturaPraia.jpeg"
+  },
+  
+    //tugal
+  {
+    type: "poster",
+    name: "Viva Portugal",
+    priceA3: 4,
+    priceA4: 3,
+    priceMolduraA3: 15,
+    priceMolduraA4: 12,
+    image: "produtos/tugal.jpeg"
+  },
+  
+  //Abobora
   {
     type: "poster",
     name: "Abóbora do Diabo",
@@ -41,10 +133,10 @@ const PRODUCTS = [
     priceA4: 3,
     priceMolduraA3: 15,
     priceMolduraA4: 12,
-    image: "produtos/Abóbora do Diabo.jpeg",
-    // extraInfo: "🔥 Best Seller",
-    // extraInfoColor: "red"
+    image: "produtos/Abóbora do Diabo.jpeg"
   },
+  
+  //Cozinha
   {
     type: "poster",
     name: "The Kitchen's on Fire",
@@ -54,17 +146,18 @@ const PRODUCTS = [
     extraInfo: "🔥 Best Seller 🔥",
     extraInfoColor: "#1e90ff"
   },
-//  {
-//    type: "User Defined Poster",
-//    name: "Poster Personalizado",
-//    priceA3: 10,
-//    priceA4: 7,
-//    priceMolduraA3: 14,
-//    priceMolduraA4: 11,
-//    image: "produtos/personalizado.jpeg",
-//    extraInfo: "Personalizável",
-//    extraInfoColor: "#6a4fd6"
-//  },
+  
+    //SexNTheCity
+  {
+    type: "poster",
+    name: "Sex and The City",
+    priceA3: 4,
+    priceA4: 3,
+    priceMolduraA3: 15,
+    priceMolduraA4: 12,
+    image: "produtos/SexNTheCity.jpeg"
+  },
+
 ];
 
 // Available frames (same options regardless of poster size). Put each jpeg inside the "molduras/" folder.
