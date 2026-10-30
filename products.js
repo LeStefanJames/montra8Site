@@ -36,40 +36,41 @@
 const PRODUCTS = [
   {
     type: "poster",
-    name: "Pôr do Sol",
-    priceA3: 8,
-    priceA4: 5,
-    priceMolduraA3: 12,
-    priceMolduraA4: 9,
-    image: "produtos/image1.jpeg",
-    extraInfo: "🔥 Best Seller",
-    extraInfoColor: "red"
+    name: "Abóbora do Diabo",
+    priceA3: 4,
+    priceA4: 3,
+    priceMolduraA3: 15,
+    priceMolduraA4: 12,
+    image: "produtos/Abóbora do Diabo.jpeg",
+    // extraInfo: "🔥 Best Seller",
+    // extraInfoColor: "red"
   },
   {
     type: "poster",
-    name: "Montanhas Nevadas",
-    priceA3: 9,
-    image: "produtos/image2.jpeg",
-    extraInfo: "Novidade",
+    name: "The Kitchen's on Fire",
+    priceA3: 4,
+    priceMolduraA3: 15,
+    image: "produtos/Depois o Cozinhado Queima.jpeg",
+    extraInfo: "🔥 Best Seller 🔥",
     extraInfoColor: "#1e90ff"
   },
-  {
-    type: "User Defined Poster",
-    name: "Poster Personalizado",
-    priceA3: 10,
-    priceA4: 7,
-    priceMolduraA3: 14,
-    priceMolduraA4: 11,
-    image: "produtos/personalizado.jpeg",
-    extraInfo: "Personalizável",
-    extraInfoColor: "#6a4fd6"
-  },
+//  {
+//    type: "User Defined Poster",
+//    name: "Poster Personalizado",
+//    priceA3: 10,
+//    priceA4: 7,
+//    priceMolduraA3: 14,
+//    priceMolduraA4: 11,
+//    image: "produtos/personalizado.jpeg",
+//    extraInfo: "Personalizável",
+//    extraInfoColor: "#6a4fd6"
+//  },
 ];
 
 // Available frames (same options regardless of poster size). Put each jpeg inside the "molduras/" folder.
 // Shown to the customer as thumbnails when they pick "Poster com Moldura"; the filename itself
 // (with extension) is what ends up in the WhatsApp message, e.g. "com moldura moldura-preta.jpeg".
 const MOLDURAS = [
-  "moldura-preta.jpeg",
-  "moldura-dourada.jpeg"
+  "Moldura-Preta.jpeg",
+  "Moldura-Branca.jpeg"
 ];
