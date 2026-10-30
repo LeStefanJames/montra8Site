@@ -114,15 +114,26 @@ const PRODUCTS = [
     image: "produtos/PinturaPraia.jpeg"
   },
   
-    //tugal
+    //Saudade
   {
     type: "poster",
-    name: "Viva Portugal",
+    name: "A Saudade",
     priceA3: 4,
     priceA4: 3,
     priceMolduraA3: 15,
     priceMolduraA4: 12,
-    image: "produtos/tugal.jpeg"
+    image: "produtos/Saudade.jpeg"
+  },
+  
+    //pulp
+  {
+    type: "poster",
+    name: "Pulp Fiction",
+    priceA3: 4,
+    priceA4: 3,
+    priceMolduraA3: 15,
+    priceMolduraA4: 12,
+    image: "produtos/pulp.jpeg"
   },
   
   //Abobora
@@ -136,6 +147,17 @@ const PRODUCTS = [
     image: "produtos/Abóbora do Diabo.jpeg"
   },
   
+    //tugal
+  {
+    type: "poster",
+    name: "Viva Portugal",
+    priceA3: 4,
+    priceA4: 3,
+    priceMolduraA3: 15,
+    priceMolduraA4: 12,
+    image: "produtos/tugal.jpeg"
+  },
+  
   //Cozinha
   {
     type: "poster",
@@ -143,8 +165,6 @@ const PRODUCTS = [
     priceA3: 4,
     priceMolduraA3: 15,
     image: "produtos/Depois o Cozinhado Queima.jpeg",
-    extraInfo: "🔥 Best Seller 🔥",
-    extraInfoColor: "#1e90ff"
   },
   
     //SexNTheCity
