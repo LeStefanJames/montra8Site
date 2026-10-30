@@ -14,7 +14,8 @@
 //   priceMolduraA4  - number, or omit/null if the "com moldura" (framed) option isn't offered in A4
 //   image           - path to the product's image, e.g. "produtos/nome-do-produto.jpg"
 //   extraInfo       - optional small badge text on top of the card, e.g. "🔥 Best Seller", "Novidade", "Personalizável". Leave empty/omit for no badge.
-//   extraInfoColor  - optional badge background color (any CSS color, e.g. "red", "#1e90ff"). Omit to use the default dark badge.
+//   extraInfoColor  - optional badge background color. Avoid plain CSS color names like "red"/"blue" (they look flat/fake) -
+//                     use "#e63946" (a muted red) or "#457b9d" (a muted blue) instead. Omit to use the default dark badge.
 //
 // Notes:
 //   - If a product only has one size filled in, only that size is shown (no pointless choice).
@@ -30,7 +31,7 @@
 //   priceMolduraA4: 9,
 //   image: "produtos/nome-do-produto.jpg",
 //   extraInfo: "🔥 Best Seller",
-//   extraInfoColor: "red"
+//   extraInfoColor: "#e63946"
 // },
 
 const PRODUCTS = [
@@ -66,7 +67,7 @@ const PRODUCTS = [
     priceMolduraA4: 12,
     image: "produtos/Stan.jpeg",
     extraInfo: "🔥 Best Seller 🔥",
-    extraInfoColor: "red"
+    extraInfoColor: "#e63946"
   },
   
     //DSOTM
