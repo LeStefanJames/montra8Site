@@ -6,7 +6,9 @@
 //                       "poster"              -> pick size, optionally a frame, then "Adicionar ao Carrinho"
 //                       "User Defined Poster" -> same size/frame steps, plus a note asking the customer
 //                                                to send their own picture via WhatsApp, then "Adicionar ao Carrinho"
-//                       anything else         -> not wired up yet, tapping just shows "Brevemente disponível"
+//                       "FifaCard"            -> pick size, then a card template (see FIFA_TEMPLATES below), then
+//                                                fill in Nome/Nacionalidade/Overall/Clube/Posição/Stats, then
+//                                                optionally a frame, then "Adicionar ao Carrinho"
 //   name            - shown in bold on the card, and used in the cart/WhatsApp message
 //   priceA3         - number, or omit/null if this product isn't sold in A3
 //   priceA4         - number, or omit/null if this product isn't sold in A4
@@ -310,4 +312,12 @@ const PRODUCTS = [
 const MOLDURAS = [
   "Moldura-Preta.jpeg",
   "Moldura-Branca.jpeg"
+];
+
+// Available FIFA card templates, shown after the size step for a "FifaCard" product.
+// Put each jpeg inside the "FifaTemplate/" folder. The name shown to the customer is the filename
+// itself without the extension, e.g. "template-ouro.jpeg" -> "Template Ouro".
+const FIFA_TEMPLATES = [
+  // "template-ouro.jpeg",
+  // "template-prata.jpeg"
 ];

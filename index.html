@@ -97,10 +97,20 @@
     font-size: .9rem;
     text-align: left;
     line-height: 1.3;
-    padding: 10px 16px;
+    padding: 16px 16px 12px;
     border-radius: 12px;
     border-left: 4px solid var(--accent-red);
     box-shadow: 0 4px 14px rgba(0,0,0,.18);
+  }
+  .promo-banner::before {
+    content: "";
+    position: absolute;
+    top: 6px;
+    left: 16px;
+    right: 16px;
+    height: 3px;
+    border-radius: 2px;
+    background: var(--accent-red);
   }
   .menu-grid {
     display: grid;
@@ -186,23 +196,21 @@
     display: none;
     align-items: center;
     justify-content: space-between;
+    width: 100%;
     background: #fff;
+    border: none;
     border-radius: 12px;
     padding: 10px 14px;
     box-shadow: 0 4px 14px rgba(0,0,0,.18);
-  }
-  .cart-total-row.visible { display: flex; }
-  .cart-total-text { font-weight: 700; font-size: .95rem; color: #1f1f1f; }
-  .cart-clear {
-    background: none;
-    border: none;
-    color: var(--accent-red);
-    font-size: .8rem;
-    font-weight: 600;
+    font: inherit;
+    text-align: left;
     cursor: pointer;
-    padding: 4px 2px;
     -webkit-tap-highlight-color: transparent;
   }
+  .cart-total-row.visible { display: flex; }
+  .cart-total-row:active { transform: scale(.98); }
+  .cart-total-text { font-weight: 700; font-size: .95rem; color: #1f1f1f; }
+  .cart-icon { font-size: 1.15rem; line-height: 1; }
 
   /* Step-by-step product configurator: size -> frame -> confirm, opened as a bottom sheet */
   .cfg-overlay {
@@ -223,6 +231,7 @@
     max-width: 480px;
     max-height: 85vh;
     overflow-y: auto;
+    overscroll-behavior: contain;
     background: #fff;
     border-radius: 20px 20px 0 0;
     padding: 20px;
@@ -234,7 +243,17 @@
     align-items: center;
     margin-bottom: 16px;
   }
-  .cfg-title { font-weight: 700; font-size: 1.05rem; color: #1f1f1f; }
+  .cfg-title { font-weight: 700; font-size: 1.05rem; color: #1f1f1f; flex: 1; text-align: center; }
+  .cfg-back {
+    background: none;
+    border: none;
+    font-size: 1.3rem;
+    line-height: 1;
+    color: #1f1f1f;
+    cursor: pointer;
+    padding: 4px 8px 4px 0;
+    visibility: hidden;
+  }
   .cfg-close {
     background: none;
     border: none;
@@ -314,6 +333,31 @@
     margin-bottom: 18px;
   }
   .btn-add { background: #1f1f1f; color: #fff; }
+  .btn-add:disabled { opacity: .4; pointer-events: none; }
+  .cfg-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+  .cfg-field label {
+    font-size: .8rem;
+    font-weight: 700;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: .3px;
+  }
+  .cfg-field input, .cfg-field select {
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid #e3e0da;
+    background: #faf7f2;
+    font-size: 1rem;
+    font-family: inherit;
+    color: #1f1f1f;
+  }
+  .cfg-stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px 14px;
+    margin-bottom: 4px;
+  }
+  .cfg-stats-grid .cfg-field { margin-bottom: 0; }
   .cfg-confirm-actions { display: flex; flex-direction: column; gap: 10px; }
   .cart-item-row {
     display: flex;
@@ -350,6 +394,8 @@
     border-radius: 10px;
     font-size: .85rem;
     font-weight: 600;
+    text-align: center;
+    max-width: 85%;
     z-index: 60;
     opacity: 0;
     pointer-events: none;
@@ -375,10 +421,10 @@
     <div class="promo-banner" id="promo-banner"></div>
     <div class="menu-grid" id="menu-grid"></div>
     <div class="cart-footer">
-      <div class="cart-total-row" id="cart-total-row">
+      <button type="button" class="cart-total-row" id="cart-total-row">
         <span class="cart-total-text" id="cart-total-text"></span>
-        <button type="button" class="cart-clear" id="cart-clear">Limpar carrinho</button>
-      </div>
+        <span class="cart-icon" aria-hidden="true">🛒</span>
+      </button>
       <a class="btn btn-wa" id="menu-wa" data-wa href="#">Encomendar via WhatsApp</a>
     </div>
   </section>
@@ -387,6 +433,7 @@
 <div class="cfg-overlay" id="cfg-overlay">
   <div class="cfg-sheet">
     <div class="cfg-header">
+      <button class="cfg-back" id="cfg-back" type="button">←</button>
       <div class="cfg-title" id="cfg-title"></div>
       <button class="cfg-close" id="cfg-close" type="button">✕</button>
     </div>
@@ -449,12 +496,37 @@
     return parts.join("<br>");
   }
 
+  // Keeps the page behind an open overlay from scrolling along with it (iOS Safari especially)
+  var scrollLockCount = 0;
+  var scrollLockY = 0;
+  function lockBodyScroll() {
+    if (scrollLockCount === 0) {
+      scrollLockY = window.scrollY || window.pageYOffset || 0;
+      document.body.style.position = "fixed";
+      document.body.style.top = (-scrollLockY) + "px";
+      document.body.style.left = "0";
+      document.body.style.right = "0";
+    }
+    scrollLockCount++;
+  }
+  function unlockBodyScroll() {
+    scrollLockCount = Math.max(0, scrollLockCount - 1);
+    if (scrollLockCount === 0) {
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.left = "";
+      document.body.style.right = "";
+      window.scrollTo(0, scrollLockY);
+    }
+  }
+
   var menuGrid = document.getElementById("menu-grid");
   var menuWaBtn = document.getElementById("menu-wa");
   var cfgOverlay = document.getElementById("cfg-overlay");
   var cfgTitle = document.getElementById("cfg-title");
   var cfgBody = document.getElementById("cfg-body");
   var cfgClose = document.getElementById("cfg-close");
+  var cfgBack = document.getElementById("cfg-back");
   var cfgPreviewImg = document.getElementById("cfg-preview-img");
 
   var cart = []; // { productIndex, type, name, size, frame, moldura, price }
@@ -463,6 +535,16 @@
   function cartLines() {
     return cart.map(function (item) {
       var frameText = item.frame ? (" com moldura" + (item.moldura ? " " + molduraLabel(item.moldura) : "")) : "";
+      if (item.type === "FifaCard") {
+        var f = item.fifaFields;
+        return '- Fifa Card do tipo ' + molduraLabel(item.fifaTemplate) + " em " + item.size + frameText + ".\n" +
+          "  Nome: " + f.nome + "\n" +
+          "  Nacionalidade: " + f.nacionalidade + "\n" +
+          "  Overall: " + f.overall + "\n" +
+          "  Clube: " + f.clube + "\n" +
+          "  Posição: " + f.posicao + "\n" +
+          "  Stats: " + fifaStatsSummary(f);
+      }
       return '- Poster "' + item.name + '" em tamanho ' + item.size + frameText + ".";
     }).join("\n");
   }
@@ -486,13 +568,12 @@
 
   var cartTotalRow = document.getElementById("cart-total-row");
   var cartTotalText = document.getElementById("cart-total-text");
-  var cartClearBtn = document.getElementById("cart-clear");
   function updateCartTotal() {
     if (cart.length === 0) { cartTotalRow.classList.remove("visible"); return; }
     cartTotalRow.classList.add("visible");
     cartTotalText.textContent = "Total: " + formatPrice(cartTotal());
   }
-  cartClearBtn.addEventListener("click", function () {
+  cartTotalRow.addEventListener("click", function () {
     openCartModal();
   });
 
@@ -527,10 +608,14 @@
     }
     cart.forEach(function (item, idx) {
       var frameText = item.frame ? (" com moldura" + (item.moldura ? " (" + molduraLabel(item.moldura) + ")" : "")) : "";
+      var detail = item.type === "FifaCard"
+        ? item.name + " — " + molduraLabel(item.fifaTemplate) + " — " + item.size + frameText +
+          "<br>" + item.fifaFields.nome + " (" + item.fifaFields.posicao + ", " + item.fifaFields.overall + ")"
+        : item.name + " — " + item.size + frameText;
       var row = document.createElement("div");
       row.className = "cart-item-row";
       row.innerHTML =
-        '<div class="cart-item-info">' + item.name + " — " + item.size + frameText + "<br>" + formatPrice(item.price) + "</div>" +
+        '<div class="cart-item-info">' + detail + "<br>" + formatPrice(item.price) + "</div>" +
         '<button type="button" class="cart-item-remove">Remover</button>';
       row.querySelector(".cart-item-remove").addEventListener("click", function () { removeCartItem(idx); });
       body.appendChild(row);
@@ -546,14 +631,14 @@
   }
 
   var cartOverlay = document.getElementById("cart-overlay");
-  function openCartModal() { renderCartModal(); cartOverlay.classList.add("open"); }
-  function closeCartModal() { cartOverlay.classList.remove("open"); }
+  function openCartModal() { renderCartModal(); lockBodyScroll(); cartOverlay.classList.add("open"); }
+  function closeCartModal() { cartOverlay.classList.remove("open"); unlockBodyScroll(); }
   document.getElementById("cart-modal-close").addEventListener("click", closeCartModal);
   cartOverlay.addEventListener("click", function (e) { if (e.target === cartOverlay) closeCartModal(); });
 
   var confirmOverlay = document.getElementById("confirm-overlay");
   var confirmText = document.getElementById("confirm-text");
-  function closeConfirm() { confirmOverlay.classList.remove("open"); }
+  function closeConfirm() { confirmOverlay.classList.remove("open"); unlockBodyScroll(); }
   document.getElementById("confirm-close").addEventListener("click", closeConfirm);
   confirmOverlay.addEventListener("click", function (e) { if (e.target === confirmOverlay) closeConfirm(); });
   document.getElementById("confirm-btn-menu").addEventListener("click", closeConfirm);
@@ -565,6 +650,7 @@
     if (cart.length === 0) {
       e.preventDefault();
       confirmText.textContent = "Nenhum poster selecionado";
+      lockBodyScroll();
       confirmOverlay.classList.add("open");
     }
   });
@@ -582,9 +668,22 @@
     toastEl._t = setTimeout(function () { toastEl.classList.remove("show"); }, 1600);
   }
 
-  function closeConfigurator() { cfgOverlay.classList.remove("open"); }
+  function closeConfigurator() { cfgOverlay.classList.remove("open"); unlockBodyScroll(); cfgHistory = []; }
   cfgClose.addEventListener("click", closeConfigurator);
   cfgOverlay.addEventListener("click", function (e) { if (e.target === cfgOverlay) closeConfigurator(); });
+
+  // Step history for the configurator sheet, so "Voltar" can re-render the previous step
+  var cfgHistory = [];
+  function cfgUpdateBackVisibility() { cfgBack.style.visibility = cfgHistory.length > 1 ? "visible" : "hidden"; }
+  function cfgGoToStep(renderFn) { cfgHistory.push(renderFn); renderFn(); cfgUpdateBackVisibility(); }
+  function cfgReplaceStep(renderFn) { cfgHistory[cfgHistory.length - 1] = renderFn; renderFn(); cfgUpdateBackVisibility(); }
+  function cfgGoBack() {
+    if (cfgHistory.length <= 1) return;
+    cfgHistory.pop();
+    cfgHistory[cfgHistory.length - 1]();
+    cfgUpdateBackVisibility();
+  }
+  cfgBack.addEventListener("click", cfgGoBack);
 
   function renderCfgOptions(options) {
     var wrap = document.createElement("div");
@@ -618,7 +717,7 @@
       return {
         label: s.size,
         price: s.price,
-        onSelect: function () { showFrameStep(p, productIndex, s.size, s.price); }
+        onSelect: function () { cfgGoToStep(function () { showFrameStep(p, productIndex, s.size, s.price); }); }
       };
     }));
   }
@@ -626,14 +725,14 @@
   function showFrameStep(p, productIndex, size, basePrice) {
     var molduraPrice = size === "A3" ? p.priceMolduraA3 : p.priceMolduraA4;
     if (molduraPrice == null) {
-      showConfirmStep(p, productIndex, size, false, basePrice, null);
+      cfgReplaceStep(function () { showConfirmStep(p, productIndex, size, false, basePrice, null); });
       return;
     }
     cfgBody.innerHTML = "";
     cfgStepLabel("Apenas poster ou com moldura?");
     renderCfgOptions([
-      { label: "Apenas Poster", price: basePrice, onSelect: function () { showConfirmStep(p, productIndex, size, false, basePrice, null); } },
-      { label: "Poster com Moldura", price: molduraPrice, onSelect: function () { showMolduraStep(p, productIndex, size, molduraPrice); } }
+      { label: "Apenas Poster", price: basePrice, onSelect: function () { cfgGoToStep(function () { showConfirmStep(p, productIndex, size, false, basePrice, null); }); } },
+      { label: "Poster com Moldura", price: molduraPrice, onSelect: function () { cfgGoToStep(function () { showMolduraStep(p, productIndex, size, molduraPrice); }); } }
     ]);
   }
 
@@ -644,7 +743,7 @@
   function showMolduraStep(p, productIndex, size, price) {
     var molduras = typeof MOLDURAS !== "undefined" ? MOLDURAS : [];
     if (molduras.length === 0) {
-      showConfirmStep(p, productIndex, size, true, price, null);
+      cfgReplaceStep(function () { showConfirmStep(p, productIndex, size, true, price, null); });
       return;
     }
     cfgBody.innerHTML = "";
@@ -657,7 +756,7 @@
       opt.className = "cfg-moldura-option";
       opt.innerHTML = '<img src="molduras/' + filename + '" alt="' + molduraLabel(filename) + '">' +
         "<span>" + molduraLabel(filename) + "</span>";
-      opt.addEventListener("click", function () { showConfirmStep(p, productIndex, size, true, price, filename); });
+      opt.addEventListener("click", function () { cfgGoToStep(function () { showConfirmStep(p, productIndex, size, true, price, filename); }); });
       grid.appendChild(opt);
     });
     cfgBody.appendChild(grid);
@@ -684,7 +783,213 @@
   function openConfigurator(p, productIndex) {
     cfgPreviewImg.src = p.image;
     cfgPreviewImg.alt = p.name;
-    showSizeStep(p, productIndex);
+    cfgHistory = [];
+    lockBodyScroll();
+    cfgGoToStep(function () { showSizeStep(p, productIndex); });
+    cfgOverlay.classList.add("open");
+  }
+
+  // ---- FifaCard flow: size -> template -> player fields -> frame -> confirm ----
+
+  function showFifaSizeStep(p, productIndex) {
+    cfgTitle.textContent = p.name;
+    cfgBody.innerHTML = "";
+    cfgStepLabel("Escolhe o tamanho");
+    var sizes = [];
+    if (p.priceA3 != null) sizes.push({ size: "A3", price: p.priceA3 });
+    if (p.priceA4 != null) sizes.push({ size: "A4", price: p.priceA4 });
+    renderCfgOptions(sizes.map(function (s) {
+      return {
+        label: s.size,
+        price: s.price,
+        onSelect: function () { cfgGoToStep(function () { showFifaTemplateStep(p, productIndex, s.size, s.price); }); }
+      };
+    }));
+  }
+
+  function showFifaTemplateStep(p, productIndex, size, basePrice) {
+    var templates = typeof FIFA_TEMPLATES !== "undefined" ? FIFA_TEMPLATES : [];
+    cfgBody.innerHTML = "";
+    cfgStepLabel("Escolhe o template");
+    if (templates.length === 0) {
+      var warn = document.createElement("div");
+      warn.className = "cfg-note";
+      warn.textContent = "Nenhum template disponível.";
+      cfgBody.appendChild(warn);
+      return;
+    }
+    var grid = document.createElement("div");
+    grid.className = "cfg-moldura-grid";
+    templates.forEach(function (filename) {
+      var opt = document.createElement("button");
+      opt.type = "button";
+      opt.className = "cfg-moldura-option";
+      opt.innerHTML = '<img src="FifaTemplate/' + filename + '" alt="' + molduraLabel(filename) + '">' +
+        "<span>" + molduraLabel(filename) + "</span>";
+      opt.addEventListener("click", function () {
+        cfgGoToStep(function () {
+          cfgPreviewImg.src = "FifaTemplate/" + filename;
+          cfgPreviewImg.alt = molduraLabel(filename);
+          showFifaFieldsStep(p, productIndex, size, basePrice, filename);
+        });
+      });
+      grid.appendChild(opt);
+    });
+    cfgBody.appendChild(grid);
+  }
+
+  var FIFA_POSITIONS = ["GK", "RB", "LB", "CB", "CDM", "CM", "CAM", "RW", "LW", "CF", "ST"];
+  var FIFA_STATS = [["pac", "PAC"], ["sho", "SHO"], ["pas", "PAS"], ["dri", "DRI"], ["def", "DEF"], ["phy", "PHY"]];
+
+  function showFifaFieldsStep(p, productIndex, size, basePrice, template) {
+    cfgBody.innerHTML = "";
+    cfgStepLabel("Preenche os dados da carta");
+
+    var fields = { nome: "", nacionalidade: "", overall: "", clube: "", posicao: "", pac: "", sho: "", pas: "", dri: "", def: "", phy: "" };
+    var continueBtn;
+
+    function updateContinueState() {
+      var allFilled = Object.keys(fields).every(function (key) { return fields[key] !== ""; });
+      continueBtn.disabled = !allFilled;
+    }
+
+    function makeTextField(key, label) {
+      var wrap = document.createElement("div");
+      wrap.className = "cfg-field";
+      var lab = document.createElement("label");
+      lab.textContent = label;
+      var input = document.createElement("input");
+      input.type = "text";
+      input.addEventListener("input", function () { fields[key] = input.value.trim(); updateContinueState(); });
+      wrap.appendChild(lab);
+      wrap.appendChild(input);
+      return wrap;
+    }
+
+    function makeDigitsField(key, label) {
+      var wrap = document.createElement("div");
+      wrap.className = "cfg-field";
+      var lab = document.createElement("label");
+      lab.textContent = label;
+      var input = document.createElement("input");
+      input.type = "text";
+      input.inputMode = "numeric";
+      input.maxLength = 2;
+      input.addEventListener("input", function () {
+        input.value = input.value.replace(/\D/g, "").slice(0, 2);
+        fields[key] = input.value;
+        updateContinueState();
+      });
+      wrap.appendChild(lab);
+      wrap.appendChild(input);
+      return wrap;
+    }
+
+    cfgBody.appendChild(makeTextField("nome", "Nome"));
+    cfgBody.appendChild(makeTextField("nacionalidade", "Nacionalidade"));
+    cfgBody.appendChild(makeDigitsField("overall", "Valor Overall"));
+    cfgBody.appendChild(makeTextField("clube", "Clube"));
+
+    var posWrap = document.createElement("div");
+    posWrap.className = "cfg-field";
+    var posLabel = document.createElement("label");
+    posLabel.textContent = "Posição";
+    var posSelect = document.createElement("select");
+    var placeholder = document.createElement("option");
+    placeholder.value = "";
+    placeholder.textContent = "-- Seleciona --";
+    posSelect.appendChild(placeholder);
+    FIFA_POSITIONS.forEach(function (pos) {
+      var opt = document.createElement("option");
+      opt.value = pos;
+      opt.textContent = pos;
+      posSelect.appendChild(opt);
+    });
+    posSelect.addEventListener("change", function () { fields.posicao = posSelect.value; updateContinueState(); });
+    posWrap.appendChild(posLabel);
+    posWrap.appendChild(posSelect);
+    cfgBody.appendChild(posWrap);
+
+    cfgStepLabel("Stats");
+    var statsGrid = document.createElement("div");
+    statsGrid.className = "cfg-stats-grid";
+    FIFA_STATS.forEach(function (pair) { statsGrid.appendChild(makeDigitsField(pair[0], pair[1])); });
+    cfgBody.appendChild(statsGrid);
+
+    continueBtn = document.createElement("button");
+    continueBtn.type = "button";
+    continueBtn.className = "btn btn-add";
+    continueBtn.textContent = "Continuar";
+    continueBtn.disabled = true;
+    continueBtn.addEventListener("click", function () { cfgGoToStep(function () { showFifaFrameStep(p, productIndex, size, basePrice, template, fields); }); });
+    cfgBody.appendChild(continueBtn);
+  }
+
+  function showFifaFrameStep(p, productIndex, size, basePrice, template, fields) {
+    var molduraPrice = size === "A3" ? p.priceMolduraA3 : p.priceMolduraA4;
+    if (molduraPrice == null) {
+      cfgReplaceStep(function () { showFifaConfirmStep(p, productIndex, size, false, basePrice, null, template, fields); });
+      return;
+    }
+    cfgBody.innerHTML = "";
+    cfgStepLabel("Apenas poster ou com moldura?");
+    renderCfgOptions([
+      { label: "Apenas Poster", price: basePrice, onSelect: function () { cfgGoToStep(function () { showFifaConfirmStep(p, productIndex, size, false, basePrice, null, template, fields); }); } },
+      { label: "Poster com Moldura", price: molduraPrice, onSelect: function () { cfgGoToStep(function () { showFifaMolduraStep(p, productIndex, size, molduraPrice, template, fields); }); } }
+    ]);
+  }
+
+  function showFifaMolduraStep(p, productIndex, size, price, template, fields) {
+    var molduras = typeof MOLDURAS !== "undefined" ? MOLDURAS : [];
+    if (molduras.length === 0) {
+      cfgReplaceStep(function () { showFifaConfirmStep(p, productIndex, size, true, price, null, template, fields); });
+      return;
+    }
+    cfgBody.innerHTML = "";
+    cfgStepLabel("Escolhe a moldura");
+    var grid = document.createElement("div");
+    grid.className = "cfg-moldura-grid";
+    molduras.forEach(function (filename) {
+      var opt = document.createElement("button");
+      opt.type = "button";
+      opt.className = "cfg-moldura-option";
+      opt.innerHTML = '<img src="molduras/' + filename + '" alt="' + molduraLabel(filename) + '">' +
+        "<span>" + molduraLabel(filename) + "</span>";
+      opt.addEventListener("click", function () { cfgGoToStep(function () { showFifaConfirmStep(p, productIndex, size, true, price, filename, template, fields); }); });
+      grid.appendChild(opt);
+    });
+    cfgBody.appendChild(grid);
+  }
+
+  function fifaStatsSummary(fields) {
+    return FIFA_STATS.map(function (pair) { return pair[1] + " " + fields[pair[0]]; }).join(" · ");
+  }
+
+  function showFifaConfirmStep(p, productIndex, size, framed, price, moldura, template, fields) {
+    var frameSummary = framed ? " com moldura" + (moldura ? " (" + molduraLabel(moldura) + ")" : "") : "";
+    cfgBody.innerHTML =
+      '<div class="cfg-summary">' + p.name + " — " + molduraLabel(template) + " — " + size + frameSummary + " — " + formatPrice(price) + "</div>" +
+      '<div class="cfg-summary">' + fields.nome + " (" + fields.nacionalidade + ") — " + fields.clube + " — " + fields.posicao + " — Overall " + fields.overall + "<br>" + fifaStatsSummary(fields) + "</div>" +
+      '<button type="button" class="btn btn-add" id="cfg-add">Adicionar ao Carrinho</button>';
+    document.getElementById("cfg-add").addEventListener("click", function () {
+      cart.push({
+        productIndex: productIndex, type: p.type, name: p.name, size: size, frame: framed, moldura: moldura, price: price,
+        fifaTemplate: template, fifaFields: fields
+      });
+      updateCartBadge(productIndex);
+      updateMenuWaButton();
+      updateCartTotal();
+      closeConfigurator();
+      showToast("Envia-nos a foto do(a) craque que queres colocar nesta carta quando falarmos por whatsapp!");
+    });
+  }
+
+  function openFifaConfigurator(p, productIndex) {
+    cfgPreviewImg.src = p.image;
+    cfgPreviewImg.alt = p.name;
+    cfgHistory = [];
+    lockBodyScroll();
+    cfgGoToStep(function () { showFifaSizeStep(p, productIndex); });
     cfgOverlay.classList.add("open");
   }
 
@@ -706,6 +1011,8 @@
     card.addEventListener("click", function () {
       if (p.type === "poster" || p.type === "User Defined Poster") {
         openConfigurator(p, i);
+      } else if (p.type === "FifaCard") {
+        openFifaConfigurator(p, i);
       } else {
         showToast("Brevemente disponível 🙂");
       }
