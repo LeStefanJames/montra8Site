@@ -136,6 +136,41 @@ const PRODUCTS = [
     image: "produtos/rsFriends.jpeg"
   },
   
+    //BrunoA
+  {
+    type: "poster",
+    name: "Então Cala-te",
+    priceA3: 4,
+    priceA4: 3,
+    priceMolduraA3: 15,
+    priceMolduraA4: 12,
+    image: "produtos/BrunoA.jpeg"
+  },
+  
+    //Bauhaus
+  {
+    type: "poster",
+    name: "Bauhaus",
+    priceA3: 4,
+    priceA4: 3,
+    priceMolduraA3: 15,
+    priceMolduraA4: 12,
+    image: "produtos/Bauhaus.jpeg"
+  },
+  
+  
+    //yayoi
+  {
+    type: "poster",
+    name: "Yayoi Kusama",
+    priceA3: 4,
+    priceA4: 3,
+    priceMolduraA3: 15,
+    priceMolduraA4: 12,
+    image: "produtos/yayoi.jpeg"
+  },
+  
+  
     //PinturaPraia
   {
     type: "poster",
@@ -146,6 +181,18 @@ const PRODUCTS = [
     priceMolduraA4: 12,
     image: "produtos/PinturaPraia.jpeg"
   },
+  
+    //WRC
+  {
+    type: "poster",
+    name: "A Catedral do Rally",
+    priceA3: 4,
+    priceA4: 3,
+    priceMolduraA3: 15,
+    priceMolduraA4: 12,
+    image: "produtos/WRC.jpeg"
+  },
+  
   
     //okasaka
   {
