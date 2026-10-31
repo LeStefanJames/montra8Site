@@ -70,6 +70,17 @@ const PRODUCTS = [
     extraInfoColor: "#e63946"
   },
   
+    //cherry
+  {
+    type: "poster",
+    name: "Tokyo Cherry",
+    priceA3: 4,
+    priceA4: 3,
+    priceMolduraA3: 15,
+    priceMolduraA4: 12,
+    image: "produtos/cherry.jpeg"
+  },
+  
     //DSOTM
   {
     type: "poster",
@@ -79,6 +90,17 @@ const PRODUCTS = [
     priceMolduraA3: 15,
     priceMolduraA4: 12,
     image: "produtos/DSOTM.jpeg"
+  },
+  
+    //table
+  {
+    type: "poster",
+    name: "Pintura de Infantário",
+    priceA3: 4,
+    priceA4: 3,
+    priceMolduraA3: 15,
+    priceMolduraA4: 12,
+    image: "produtos/table.jpeg"
   },
   
     //Canito
@@ -91,8 +113,7 @@ const PRODUCTS = [
     priceMolduraA4: 12,
     image: "produtos/Canito.jpeg"
   },
-    
-  
+      
   //casaMyPlace
   {
     type: "poster",
@@ -104,6 +125,17 @@ const PRODUCTS = [
     image: "produtos/casaMyPlace.jpeg"
   },
   
+  //rsFriends
+  {
+    type: "poster",
+    name: "The Rolling Friends",
+    priceA3: 4,
+    priceA4: 3,
+    priceMolduraA3: 15,
+    priceMolduraA4: 12,
+    image: "produtos/rsFriends.jpeg"
+  },
+  
     //PinturaPraia
   {
     type: "poster",
@@ -113,6 +145,39 @@ const PRODUCTS = [
     priceMolduraA3: 15,
     priceMolduraA4: 12,
     image: "produtos/PinturaPraia.jpeg"
+  },
+  
+    //okasaka
+  {
+    type: "poster",
+    name: "Okinawa",
+    priceA3: 4,
+    priceA4: 3,
+    priceMolduraA3: 15,
+    priceMolduraA4: 12,
+    image: "produtos/okasaka.jpeg"
+  },
+  
+    //wine
+  {
+    type: "poster",
+    name: "Wine Not?",
+    priceA3: 4,
+    priceA4: 3,
+    priceMolduraA3: 15,
+    priceMolduraA4: 12,
+    image: "produtos/wine.jpeg"
+  },
+  
+    //vinil
+  {
+    type: "poster",
+    name: "Music is a Beautiful Thing...",
+    priceA3: 4,
+    priceA4: 3,
+    priceMolduraA3: 15,
+    priceMolduraA4: 12,
+    image: "produtos/vinil.jpeg"
   },
   
     //Saudade
@@ -135,6 +200,17 @@ const PRODUCTS = [
     priceMolduraA3: 15,
     priceMolduraA4: 12,
     image: "produtos/pulp.jpeg"
+  },
+  
+    //yolo
+  {
+    type: "poster",
+    name: "YOLO",
+    priceA3: 4,
+    priceA4: 3,
+    priceMolduraA3: 15,
+    priceMolduraA4: 12,
+    image: "produtos/yolo.jpeg"
   },
   
   //Abobora
