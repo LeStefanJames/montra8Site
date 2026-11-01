@@ -54,10 +54,10 @@ const PRODUCTS = [
   {
     type: "FifaCard",
     name: "Faz a tua Fifa Card",
-    priceA3: 4,
-    priceA4: 3,
-    priceMolduraA3: 15,
-    priceMolduraA4: 12,
+    priceA3: 6,
+    priceA4: 5,
+    priceMolduraA3: 20,
+    priceMolduraA4: 15,
     image: "produtos/FifaUtCard.jpeg",
     extraInfo: "🎨 Personaliza o teu 🎨",
     extraInfoColor: "blue"
