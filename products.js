@@ -45,7 +45,22 @@ const PRODUCTS = [
     priceA4: 3,
     priceMolduraA3: 15,
     priceMolduraA4: 12,
-    image: "produtos/Personal.jpeg"
+    image: "produtos/Personal.jpeg",
+    extraInfo: "🎨 Personaliza o teu 🎨",
+    extraInfoColor: "green"
+  },
+  
+  //FifaCard
+  {
+    type: "FifaCard",
+    name: "Faz a tua Fifa Card",
+    priceA3: 4,
+    priceA4: 3,
+    priceMolduraA3: 15,
+    priceMolduraA4: 12,
+    image: "produtos/FifaUtCard.jpeg",
+    extraInfo: "🎨 Personaliza o teu 🎨",
+    extraInfoColor: "blue"
   },
   
     //BadB
@@ -59,15 +74,15 @@ const PRODUCTS = [
     image: "produtos/CoelhoCafe.jpeg"
   },
   
-    //Stan
+    //table
   {
     type: "poster",
-    name: "Stan The Man",
+    name: "Pintura de Infantário",
     priceA3: 4,
     priceA4: 3,
     priceMolduraA3: 15,
     priceMolduraA4: 12,
-    image: "produtos/Stan.jpeg",
+    image: "produtos/table.jpeg",
     extraInfo: "🔥 Best Seller 🔥",
     extraInfoColor: "#e63946"
   },
@@ -94,17 +109,6 @@ const PRODUCTS = [
     image: "produtos/DSOTM.jpeg"
   },
   
-    //table
-  {
-    type: "poster",
-    name: "Pintura de Infantário",
-    priceA3: 4,
-    priceA4: 3,
-    priceMolduraA3: 15,
-    priceMolduraA4: 12,
-    image: "produtos/table.jpeg"
-  },
-  
     //Canito
   {
     type: "poster",
@@ -125,6 +129,17 @@ const PRODUCTS = [
     priceMolduraA3: 15,
     priceMolduraA4: 12,
     image: "produtos/casaMyPlace.jpeg"
+  },
+  
+    //Stan
+  {
+    type: "poster",
+    name: "Stan The Man",
+    priceA3: 4,
+    priceA4: 3,
+    priceMolduraA3: 15,
+    priceMolduraA4: 12,
+    image: "produtos/Stan.jpeg"
   },
   
   //rsFriends
@@ -318,6 +333,6 @@ const MOLDURAS = [
 // Put each jpeg inside the "FifaTemplate/" folder. The name shown to the customer is the filename
 // itself without the extension, e.g. "template-ouro.jpeg" -> "Template Ouro".
 const FIFA_TEMPLATES = [
-  // "template-ouro.jpeg",
-  // "template-prata.jpeg"
+  "gold-card.jpeg",
+  "Legend-Card.jpeg"
 ];
