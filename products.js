@@ -59,7 +59,7 @@ const PRODUCTS = [
     priceMolduraA3: 20,
     priceMolduraA4: 15,
     image: "produtos/FifaUtCard.jpeg",
-    extraInfo: "🎨 Personaliza o teu 🎨",
+    extraInfo: "⚽ Novidade!! ⚽",
     extraInfoColor: "blue"
   },
   
@@ -77,7 +77,7 @@ const PRODUCTS = [
     //table
   {
     type: "poster",
-    name: "Pintura de Infantário",
+    name: "Breakfast Time",
     priceA3: 4,
     priceA4: 3,
     priceMolduraA3: 15,
@@ -89,8 +89,8 @@ const PRODUCTS = [
   
     //cherry
   {
-    type: "poster",
-    name: "Tokyo Cherry",
+    type: "poster", 
+    name: "Red Kusama",
     priceA3: 4,
     priceA4: 3,
     priceMolduraA3: 15,
@@ -145,7 +145,7 @@ const PRODUCTS = [
   //rsFriends
   {
     type: "poster",
-    name: "The Rolling Friends",
+    name: "Friends",
     priceA3: 4,
     priceA4: 3,
     priceMolduraA3: 15,
@@ -191,7 +191,7 @@ const PRODUCTS = [
     //PinturaPraia
   {
     type: "poster",
-    name: "Saint Tropez",
+    name: "Matisse",
     priceA3: 4,
     priceA4: 3,
     priceMolduraA3: 15,
@@ -280,7 +280,7 @@ const PRODUCTS = [
   //Abobora
   {
     type: "poster",
-    name: "Abóbora do Diabo",
+    name: "Smashing Pumpkin",
     priceA3: 4,
     priceA4: 3,
     priceMolduraA3: 15,
